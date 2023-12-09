@@ -26,7 +26,7 @@ fn main() {
             std::process::exit(1)
         }
     };
-    let data: Result<Vec<Data>, serde_json::Error> = serde_json::from_str(file_contents.as_str());
+    let data: Result<Vec<Data>, serde_json::Error> = serde_json::from_str(&file_contents);
     let data: Vec<Data> = match data {
         Ok(data) => data,
         Err(err) => {
