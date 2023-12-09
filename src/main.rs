@@ -36,7 +36,7 @@ fn main() {
     };
     let ms_played: u64 = data
         .iter()
-        .filter_map(|d| {
+        .filter_map(|d: &Data| {
             if d.artist_name == "The Official Podcast" {
                 Some(d.ms_played)
             } else {
