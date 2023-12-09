@@ -18,7 +18,7 @@ fn main() {
     }
 
     let file_path = &args[1];
-    let file_contents: Result<String, std::io::Error> = std::fs::read_to_string(&file_path);
+    let file_contents: Result<String, std::io::Error> = std::fs::read_to_string(file_path);
     let file_contents: String = match file_contents {
         Ok(file_contents) => file_contents,
         Err(err) => {
