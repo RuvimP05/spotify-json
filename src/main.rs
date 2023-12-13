@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use serde_json::from_reader;
-use std::env;
+use std::env::args;
 use std::fs::File;
 use std::process::exit;
 
@@ -13,7 +13,7 @@ struct Data {
 }
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let args: Vec<String> = args().collect();
 
     if args.len() != 2 {
         eprintln!("Usage: spotify-json <file_path>");
