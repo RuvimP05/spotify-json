@@ -1,5 +1,8 @@
 use serde::Deserialize;
+use serde_json::from_reader;
 use std::env;
+use std::fs::File;
+use std::process::exit;
 
 #[derive(Deserialize)]
 struct Data {
@@ -14,24 +17,25 @@ fn main() {
 
     if args.len() != 2 {
         eprintln!("Usage: spotify-json <file_path>");
-        std::process::exit(1);
+        exit(1);
     }
 
-    let file_path = &args[1];
-    let file_contents: Result<String, std::io::Error> = std::fs::read_to_string(file_path);
-    let file_contents: String = match file_contents {
+    let file_path: &String = &args[1];
+    let file_contents: File = match File::open(file_path) {
         Ok(file_contents) => file_contents,
         Err(err) => {
-            eprintln!("Error reading file to String: {}", err);
+            eprintln!(
+                "Failed to open file specified\nUsage: spotify-json <file_path>\n{}",
+                err
+            );
             std::process::exit(1)
         }
     };
-    let data: Result<Vec<Data>, serde_json::Error> = serde_json::from_str(&file_contents);
-    let data: Vec<Data> = match data {
+    let data: Vec<Data> = match from_reader(file_contents) {
         Ok(data) => data,
         Err(err) => {
-            eprintln!("Error deserializing &str: {}", err);
-            std::process::exit(1)
+            eprintln!("Failed to deserialize from file {}\n{}", file_path, err);
+            exit(2)
         }
     };
     let ms_played: u64 = data
