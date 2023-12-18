@@ -25,10 +25,10 @@ fn main() {
     if args.len() != 3 {
         eprintln!(
             "Not enough arguments supplied
-            Usage: spotify-json <file_path> <Option>
-            Options:
-            -a\t\tcalculate total minutes across all artists
-            artist_name\ttype in the name of a artist or show\n",
+Usage: spotify-json <file_path> <Option>
+Options:
+    -a\t\t\t\tcalculate total minutes across all artists
+    <artist/podcast>\ttype in the name of a artist or show\n",
         );
         exit(1);
     }
@@ -39,11 +39,11 @@ fn main() {
         Err(err) => {
             eprintln!(
                 "Failed to open file specified
-                Usage: spotify-json <file_path> <Option>
-                Options:
-                -a\t\tcalculate total minutes across all artists
-                artist_name\ttype in the name of a artist or show\n
-                ERROR: {}",
+Usage: spotify-json <file_path> <Option>
+Options:
+    -a\t\t\t\tcalculate total minutes across all artists
+    <artist/podcast>\ttype in the name of a artist or show\n
+ERROR: {}",
                 err
             );
             exit(2)
