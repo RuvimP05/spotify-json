@@ -23,24 +23,34 @@ fn main() {
     let args: Vec<String> = args().collect();
 
     if args.len() != 3 {
-        eprintln!("Usage: spotify-json <file_path> <artist/podcast_name>");
+        eprintln!(
+            "Not enough arguments supplied
+            Usage: spotify-json <file_path> <Option>
+            Options:
+            -a\t\tcalculate total minutes across all artists
+            artist_name\ttype in the name of a artist or show\n",
+        );
         exit(1);
     }
 
     let file_path: &String = &args[1];
-    let name: &String = &args[2];
     let file_contents: File = match File::open(file_path) {
         Ok(file_contents) => file_contents,
         Err(err) => {
             eprintln!(
-                "Failed to open file specified\nUsage: spotify-json <file_path> <artist_name>\n{}",
+                "Failed to open file specified
+                Usage: spotify-json <file_path> <Option>
+                Options:
+                -a\t\tcalculate total minutes across all artists
+                artist_name\ttype in the name of a artist or show\n
+                ERROR: {}",
                 err
             );
             exit(2)
         }
     };
 
-    let buf_reader = BufReader::new(file_contents);
+    let buf_reader: BufReader<File> = BufReader::new(file_contents);
 
     let data: Vec<Data> = match from_reader(buf_reader) {
         Ok(data) => data,
@@ -49,24 +59,34 @@ fn main() {
             exit(3)
         }
     };
+    let name: &String = &args[2];
     let ms_played: u64 = data
         .iter()
         .filter_map(|d: &Data| {
-            if d.artist_name.as_deref() == Some(name) {
-                Some(d.ms_played)
-            } else if d.artist_name_ext.as_deref() == Some(name) {
-                Some(d.ms_played_ext)
-            } else if d.podcast_name.as_deref() == Some(name) {
-                Some(d.ms_played_ext)
+            if name == "-a" {
+                Some(
+                    (match d.ms_played {
+                        Some(ms_played) => ms_played,
+                        None => 0,
+                    }) + (match d.ms_played_ext {
+                        Some(ms_played_ext) => ms_played_ext,
+                        None => 0,
+                    }),
+                )
+            } else if d.artist_name.as_deref() == Some(name) {
+                d.ms_played
+            } else if d.artist_name_ext.as_deref() == Some(name)
+                || d.podcast_name.as_deref() == Some(name)
+            {
+                d.ms_played_ext
             } else {
                 None
             }
         })
-        .flatten()
         .sum();
     println!(
         "you have listened to {} minutes of {}",
         ms_played / 60000,
-        name
+        if name == "-a" { "spotify" } else { name }
     );
 }
