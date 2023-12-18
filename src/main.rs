@@ -27,7 +27,7 @@ fn main() {
             "Not enough arguments supplied
 Usage: spotify-json <file_path> <Option>
 Options:
-    -a\t\t\t\tcalculate total minutes across all artists
+    -a\t\t\tcalculate total minutes across all artists
     <artist/podcast>\ttype in the name of a artist or show\n",
         );
         exit(1);
@@ -41,7 +41,7 @@ Options:
                 "Failed to open file specified
 Usage: spotify-json <file_path> <Option>
 Options:
-    -a\t\t\t\tcalculate total minutes across all artists
+    -a\t\t\tcalculate total minutes across all artists
     <artist/podcast>\ttype in the name of a artist or show\n
 ERROR: {}",
                 err
