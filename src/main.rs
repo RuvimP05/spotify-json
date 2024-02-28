@@ -64,15 +64,7 @@ ERROR: {}",
         .iter()
         .filter_map(|d: &Data| {
             if name == "-a" {
-                Some(
-                    (match d.ms_played {
-                        Some(ms_played) => ms_played,
-                        None => 0,
-                    }) + (match d.ms_played_ext {
-                        Some(ms_played_ext) => ms_played_ext,
-                        None => 0,
-                    }),
-                )
+                Some(d.ms_played.unwrap_or(0) + d.ms_played_ext.unwrap_or(0))
             } else if d.artist_name.as_deref() == Some(name) {
                 d.ms_played
             } else if d.artist_name_ext.as_deref() == Some(name)
